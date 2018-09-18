@@ -2,9 +2,6 @@
 Created on Oct 14, 2010
 
 @author: Peter Harrington
-
-这个脚本是讲可视化的，暂时先不需要这个，以后复习的时候可以再连着matplotlib 一起看
-
 '''
 import matplotlib.pyplot as plt
 
@@ -34,6 +31,9 @@ def getTreeDepth(myTree):
     return maxDepth
 
 def plotNode(nodeTxt, centerPt, parentPt, nodeType):
+    '''
+    annotate :在数据图形上添加文本注释
+    '''
     createPlot.ax1.annotate(nodeTxt, xy=parentPt,  xycoords='axes fraction',
              xytext=centerPt, textcoords='axes fraction',
              va="center", ha="center", bbox=nodeType, arrowprops=arrow_args )
@@ -74,7 +74,7 @@ def createPlot(inTree):
     plotTree(inTree, (0.5,1.0), '')
     plt.show()
 
-#def createPlot():
+# def createPlot():
 #    fig = plt.figure(1, facecolor='white')
 #    fig.clf()
 #    createPlot.ax1 = plt.subplot(111, frameon=False) #ticks for demo puropses 
@@ -89,3 +89,8 @@ def retrieveTree(i):
     return listOfTrees[i]
 
 #createPlot(thisTree)
+
+def main():
+    createPlot()
+if __name__ == "__main__":
+    main()
