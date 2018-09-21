@@ -29,16 +29,14 @@ def createVocabList(dataSet):
         vocabSet = vocabSet | set(document) #union of the two sets
     return list(vocabSet)
 
-def setOfWords2Vec(vocabList, inputSet):
+def bagOfWords2VecMN(vocabList, inputSet):
     '''
-    输入两个集合，验证第二个集合中的单词是否出现在前一个集合中
-    最终将一组单词转换成了向量
+    与setOfWords2Vec差不多
     '''
-    returnVec = [0]*len(vocabList) # 
+    returnVec = [0]*len(vocabList)
     for word in inputSet:
         if word in vocabList:
-            returnVec[vocabList.index(word)] = 1 # 1 代表出现，0代表没有
-        else: print ("the word: %s is not in my Vocabulary!" % word)
+            returnVec[vocabList.index(word)] += 1 #这里是对的出现的单词计数
     return returnVec
 
 def trainNB0(trainMatrix,trainCategory):
@@ -48,9 +46,9 @@ def trainNB0(trainMatrix,trainCategory):
     numTrainDocs = len(trainMatrix) #有多少行
     numWords = len(trainMatrix[0])  # 第一行有多少个单词
     pAbusive = sum(trainCategory)/float(numTrainDocs) # 这里看不懂
-    # 构造全0矩阵
-    p0Num = np.zeros(numWords); p1Num = np.zeros(numWords)      #change to ones() 
-    p0Denom = 0.0; p1Denom = 0.0                        #change to 2.0
+    # 构造全1矩阵
+    p0Num = np.ones(numWords); p1Num = np.ones(numWords)      #change to ones() 
+    p0Denom = 2.0; p1Denom = 2.0                        #change to 2.0
     for i in range(numTrainDocs):
         if trainCategory[i] == 1: #
             p1Num += trainMatrix[i] # 矩阵相加
@@ -59,18 +57,17 @@ def trainNB0(trainMatrix,trainCategory):
             p0Num += trainMatrix[i]
             p0Denom += sum(trainMatrix[i])
         #print(trainMatrix[i])    
-    p1Vect = p1Num/p1Denom
-    p0Vect = p0Num/p0Denom
+    p1Vect = np.log(p1Num/p1Denom)
+    p0Vect = np.log(p0Num/p0Denom)
     return p0Vect,p1Vect,pAbusive
 
 def main():
     listOPosts,listClasses = loadDataSet()
     myVocabList = createVocabList(listOPosts)
-    print (myVocabList) #　测试数据集
     trainMat = []
     # 统计每句话单词是否在集合中，1代表出现，0代表没有
     for postinDoc in listOPosts:
-        trainMat.append(setOfWords2Vec(myVocabList,postinDoc))
+        trainMat.append(bagOfWords2VecMN(myVocabList,postinDoc))
     p0V,p1V,pAb = trainNB0(trainMat,listClasses)
     print(p0V,p1V,pAb)
 
