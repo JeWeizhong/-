@@ -63,6 +63,7 @@ def bagOfWords2VecMN(vocabList, inputSet):
 
 def spamTest():
     docList=[]; classList = []; fullText =[]
+    # 读取文件，获取文档，组成列表
     for i in range(1,26):
         wordList = textParse(open('F:\\zhongjianwei\\pyscript\\机器学习实战\\Machine-learning-in-action-notes-and-code\\Naive-Bayes\\Ch04\\email\\email\\spam\\%d.txt' % i,encoding= 'ISO-8859-1').read())
         docList.append(wordList)
@@ -72,6 +73,7 @@ def spamTest():
         docList.append(wordList)
         fullText.extend(wordList)
         classList.append(0)
+    # 去重复    
     vocabList = createVocabList(docList)#create vocabulary
     trainingSet = list(range(50)); testSet=[]           #create test set
     for i in range(10):
