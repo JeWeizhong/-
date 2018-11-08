@@ -50,7 +50,7 @@ def gradAscent(dataIn,classLables):
     for k in range (maxCycles):
         h = sigmoid(dataMaxtrix*weights)
         error = labelMat - h
-        # 迭代算法，笔记里会有推倒的详细过程
+        # 公式(12)
         weights = weights + alpha * dataMaxtrix.transpose() * error
     return weights
 
@@ -70,16 +70,19 @@ def loadDataSet():
     for line in fr.readlines():
         # 默认分隔符： 换行，空格，制表符
         lineArr = line.strip().split()
+        # 只取文件前两列当做x1，x2，而x0设置为1
         dataMat.append([1.0, float(lineArr[0]), float(lineArr[1])])
+        # y值
         labelMat.append(int(lineArr[2]))
     return dataMat,labelMat
 
 def main():
     dataArr,labelMat = loadDataSet()
+    #print(dataArr)
     weights = gradAscent(dataArr,labelMat)
     print(weights)
     # 矩阵转换成数组
-    #plotBestFit(weights.getA())
+    plotBestFit(weights.getA())
 
 if __name__ == '__main__':
     main()
